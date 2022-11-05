@@ -1,0 +1,155 @@
+<!doctype html>
+<!--
+    MIT License
+
+    Copyright (c) 2022 daniel.source
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this software and associated documentation files
+    (the "Software"), to deal in the Software without restriction,
+    including without limitation the rights to use, copy, modify, merge,
+    publish, distribute, sublicense, and/or sell copies of the Software,
+    and to permit persons to whom the Software is furnished to do so,
+    subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+    BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+    ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<html lang="en">
+    <head>
+        <title>playground.html</title>
+        <meta name="description"
+              content="An one-page HTML that allows you to edit HTML code and see the output instantly." />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1" />
+        <link
+                href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAiIiIA7u7uAMnJyQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICACACAgIgAQEAEAEBARABIQAQASEBAAERABABEQEAAQECEgERAQABAQERAQEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                rel="icon" type="image/x-icon" />
+        <style>
+:root {
+    --bg-color: #1c1c1c;
+    --bg-color-weak: #222;
+    --fg-color: #eee;
+    --header-width: 32px;
+    --common-padding: 6px;
+}
+
+* {
+    margin: 0;
+    border: 0;
+    accent-color: var(--bg-color);
+}
+
+html {
+    background-color: var(--bg-color-weak);
+    color: var(--fg-color);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+body>header {
+    position: static;
+    height: var(--header-height);
+    padding: var(--common-padding);
+    background-color: var(--bg-color);
+}
+
+body>header>h1 a {
+    color: var(--fg-color);
+    text-decoration: none;
+}
+
+body>main {
+    display: flex;
+    flex: 1;
+    position: relative;
+    margin-top: var(--header-height);
+}
+
+#playground-editable {
+    display: flex;
+    flex: 1;
+}
+
+#playground-editable iframe {
+    flex: 1;
+}
+
+#playground-editor {
+    display: flex;
+    position: absolute;
+    bottom: var(--common-padding);
+    right: var(--common-padding);
+    transform: rotate(180deg);
+    overflow: auto;
+    resize: both;
+    padding: var(--common-padding);
+    background-color: var(--bg-color);
+    opacity: 0.5;
+}
+
+#playground-editor:hover {
+    opacity: 1;
+}
+
+#playground-editor textarea {
+    flex: 1;
+    transform: rotate(180deg);
+    resize: none;
+    font-size: 0.8rem;
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1><a href="">playground.html</a></h1>
+        </header>
+        <main>
+            <div id="playground-editable">
+                <iframe></iframe>
+            </div>
+            <div id="playground-editor">
+                <textarea
+                 placeholder="Write HTML code here..."></textarea>
+            </div>
+        </main>
+        <script>
+            "use strict";
+
+            const editable =
+                document.getElementById("playground-editable");
+            const iframe = editable.querySelector("iframe");
+
+            const editor = document.getElementById("playground-editor");
+            const textarea = editor.querySelector("textarea");
+
+            function update() {
+                const data = encodeURIComponent("<!DOCTYPE html>\n" +
+                    textarea.value);
+                iframe.src = "data:text/html;charset=utf-8," + data;
+                localStorage.setItem("textarea-value", textarea.value);
+            }
+
+            textarea.value = localStorage.getItem("textarea-value") ||
+                "";
+            textarea.addEventListener("input", update);
+            update();
+        </script>
+    </body>
+</html>
